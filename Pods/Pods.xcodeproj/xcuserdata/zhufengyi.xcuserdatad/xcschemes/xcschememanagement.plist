@@ -29,7 +29,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>Pods-测试使用afnet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -67,12 +67,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>02A58875C2B0EF52542768E52AE0C51E</key>
+		<key>094C0B4D1BFDD658BEF3D554A214A939</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1C8787D605626E0FB536D03BCDFBB325</key>
+		<key>1FEB6C9890E96548E7FA5A75F3D44E62</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2A4BF5990CF8B59A9A4358D78C9ABD2C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>35B4EBFA82D9795B960F9F3ECF304BEF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>389A629166B6F44DE5EB1F46D43D2EAF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,22 +97,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5B6192B113357A51D7905C639E8B7F2E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>82B3A08D10851ED33CF19E0F14DE7701</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>92201602A040F6A102EEEB24DACA00B8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>928353533005A4198EBDA5B700D37B64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9AB12D500BD37AE871BFE03C41C4AF50</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9CDF8F65A8703CD861C7D6352D7FE2EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -107,17 +117,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A9BE58ACA44B7451024359EBA9AADBA8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>B4A3E08D49931371F7247521A50EAF79</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CCEE4AD19A4119324365082718154AFF</key>
 		<dict>
 			<key>primary</key>
 			<true/>

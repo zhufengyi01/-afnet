@@ -7,7 +7,7 @@
 
 @interface NSData (ImageContentType)
 
-/**  获取图片的后缀名
+/**
  *  Compute the content type for an image data
  *
  *  @param data the input data

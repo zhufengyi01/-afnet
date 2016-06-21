@@ -15,11 +15,11 @@ typedef NS_ENUM(NSInteger, SDImageCacheType) {
      */
     SDImageCacheTypeNone,
     /**
-     * The image was obtained from the disk cache 磁盘缓存
+     * The image was obtained from the disk cache.
      */
     SDImageCacheTypeDisk,
     /**
-     * The image was obtained from the memory cache.内存缓存
+     * The image was obtained from the memory cache.
      */
     SDImageCacheTypeMemory
 };
@@ -31,26 +31,23 @@ typedef void(^SDWebImageCheckCacheCompletionBlock)(BOOL isInCache);
 typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger totalSize);
 
 /**
- 图片缓存相关的类
  * SDImageCache maintains a memory cache and an optional disk cache. Disk cache write operations are performed
  * asynchronous so it doesn’t add unnecessary latency to the UI.
  */
 @interface SDImageCache : NSObject
 
 /**
- //  默认不清除缓存，如果你的内存发生警告的时候，得把这个属性设置成no
  * Decompressing images that are downloaded and cached can improve performance but can consume lot of memory.
  * Defaults to YES. Set this to NO if you are experiencing a crash due to excessive memory consumption.
  */
 @property (assign, nonatomic) BOOL shouldDecompressImages;
 
-/**   //不支持云备份
+/**
  *  disable iCloud backup [defaults to YES]
  */
 @property (assign, nonatomic) BOOL shouldDisableiCloud;
 
 /**
- 默认使用内存缓存
  * use memory cache [defaults to YES]
  */
 @property (assign, nonatomic) BOOL shouldCacheImagesInMemory;
@@ -62,37 +59,34 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
 
 /**
  * The maximum number of objects the cache should hold.
-// ／最大内存限制
  */
 @property (assign, nonatomic) NSUInteger maxMemoryCountLimit;
 
 /**
- *  内存最长时间（秒）
- The maximum length of time to keep an image in the cache, in seconds
+ * The maximum length of time to keep an image in the cache, in seconds
  */
 @property (assign, nonatomic) NSInteger maxCacheAge;
 
-/**  最大缓存大小
+/**
  * The maximum size of the cache, in bytes.
  */
 @property (assign, nonatomic) NSUInteger maxCacheSize;
 
 /**
-    单例模式
  * Returns global shared cache instance
- *  * @return SDImageCache global instance
+ *
+ * @return SDImageCache global instance
  */
 + (SDImageCache *)sharedImageCache;
 
 /**
-初始化存储使用具体的命名空间
  * Init a new cache store with a specific namespace
  *
  * @param ns The namespace to use for this cache store
  */
 - (id)initWithNamespace:(NSString *)ns;
 
-/**初始化一个内存空间在某一个文件夹下面
+/**
  * Init a new cache store with a specific namespace and directory
  *
  * @param ns        The namespace to use for this cache store
@@ -100,10 +94,9 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
  */
 - (id)initWithNamespace:(NSString *)ns diskCacheDirectory:(NSString *)directory;
 
-//新建一个内存缓存路径
 -(NSString *)makeDiskCachePath:(NSString*)fullNamespace;
 
-/** 增加一个只读的内存缓存路径
+/**
  * Add a read-only cache path to search for images pre-cached by SDImageCache
  * Useful if you want to bundle pre-loaded images with your app
  *
@@ -111,13 +104,11 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
  */
 - (void)addReadOnlyCachePath:(NSString *)path;
 
-/** 存储一个图片在缓存和磁盘上
+/**
  * Store an image into memory and disk cache at the given key.
  *
  * @param image The image to store
- 
  * @param key   The unique image cache key, usually it's image absolute URL
- key 这是一个唯一的路径，通常使用图片url的绝对路径
  */
 - (void)storeImage:(UIImage *)image forKey:(NSString *)key;
 
@@ -143,7 +134,15 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
  */
 - (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
-/** 异步查询磁盘缓存根据key
+/**
+ * Store image NSData into disk cache at the given key.
+ *
+ * @param imageData The image data to store
+ * @param key   The unique image cache key, usually it's image absolute URL
+ */
+- (void)storeImageDataToDisk:(NSData *)imageData forKey:(NSString *)key;
+
+/**
  * Query the disk cache asynchronously.
  *
  * @param key The unique key used to store the wanted image
@@ -165,7 +164,7 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
 - (UIImage *)imageFromDiskCacheForKey:(NSString *)key;
 
 /**
- * Remove the image from memory and disk cache synchronously
+ * Remove the image from memory and disk cache asynchronously
  *
  * @param key The unique image cache key
  */
@@ -220,23 +219,23 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
  */
 - (void)cleanDiskWithCompletionBlock:(SDWebImageNoParamsBlock)completionBlock;
 
-/** 移除所有超时的缓存图片
+/**
  * Remove all expired cached image from disk
  * @see cleanDiskWithCompletionBlock:
  */
 - (void)cleanDisk;
 
-/** 获取磁盘中缓存图片大小
+/**
  * Get the size used by the disk cache
  */
 - (NSUInteger)getSize;
 
-/**  获取有多少张图片在磁盘中
+/**
  * Get the number of images in the disk cache
  */
 - (NSUInteger)getDiskCount;
 
-/**  异步计算磁盘内存大小
+/**
  * Asynchronously calculate the disk cache's size.
  */
 - (void)calculateSizeWithCompletionBlock:(SDWebImageCalculateSizeBlock)completionBlock;

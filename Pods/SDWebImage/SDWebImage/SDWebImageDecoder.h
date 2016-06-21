@@ -11,9 +11,6 @@
 #import <Foundation/Foundation.h>
 #import "SDWebImageCompat.h"
 
-/**
- *  图片解码
- */
 @interface UIImage (ForceDecode)
 
 + (UIImage *)decodedImageWithImage:(UIImage *)image;

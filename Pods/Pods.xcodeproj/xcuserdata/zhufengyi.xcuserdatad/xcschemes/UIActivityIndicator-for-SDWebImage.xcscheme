@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '42F198DF6B1E09528050B2AE'
+               BlueprintIdentifier = '9CDF8F65A8703CD861C7D6352D7FE2EE'
                BlueprintName = 'UIActivityIndicator-for-SDWebImage'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libUIActivityIndicator-for-SDWebImage.a'>

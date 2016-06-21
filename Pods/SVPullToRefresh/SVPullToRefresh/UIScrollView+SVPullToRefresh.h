@@ -15,32 +15,23 @@
 
 @interface UIScrollView (SVPullToRefresh)
 
-typedef NS_ENUM(NSUInteger, SVPullToRefreshPosition) {
-    SVPullToRefreshPositionTop = 0,
-    SVPullToRefreshPositionBottom,
-};
-
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler;
-- (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler position:(SVPullToRefreshPosition)position;
 - (void)triggerPullToRefresh;
-// 刷新视图
+
 @property (nonatomic, strong, readonly) SVPullToRefreshView *pullToRefreshView;
-/**
- *  是否显示刷新视图
- */
 @property (nonatomic, assign) BOOL showsPullToRefresh;
 
 @end
 
 
-typedef NS_ENUM(NSUInteger, SVPullToRefreshState) {
+enum {
     SVPullToRefreshStateStopped = 0,
     SVPullToRefreshStateTriggered,
     SVPullToRefreshStateLoading,
-    SVPullToRefreshStateAll = 10//所有的状态
+    SVPullToRefreshStateAll = 10
 };
 
-
+typedef NSUInteger SVPullToRefreshState;
 
 @interface SVPullToRefreshView : UIView
 
@@ -48,11 +39,9 @@ typedef NS_ENUM(NSUInteger, SVPullToRefreshState) {
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, strong, readonly) UILabel *titleLabel;
 @property (nonatomic, strong, readonly) UILabel *subtitleLabel;
-@property (nonatomic, strong, readwrite) UIColor *activityIndicatorViewColor NS_AVAILABLE_IOS(5_0);
 @property (nonatomic, readwrite) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
 
 @property (nonatomic, readonly) SVPullToRefreshState state;
-@property (nonatomic, readonly) SVPullToRefreshPosition position;
 
 - (void)setTitle:(NSString *)title forState:(SVPullToRefreshState)state;
 - (void)setSubtitle:(NSString *)subtitle forState:(SVPullToRefreshState)state;
@@ -61,9 +50,6 @@ typedef NS_ENUM(NSUInteger, SVPullToRefreshState) {
 - (void)startAnimating;
 - (void)stopAnimating;
 
-
-
-#pragma mark 超时的方法
 // deprecated; use setSubtitle:forState: instead
 @property (nonatomic, strong, readonly) UILabel *dateLabel DEPRECATED_ATTRIBUTE;
 @property (nonatomic, strong) NSDate *lastUpdatedDate DEPRECATED_ATTRIBUTE;

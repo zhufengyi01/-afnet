@@ -31,8 +31,6 @@ enum {
 
 typedef NSUInteger SVInfiniteScrollingState;
 
-
-
 @interface SVInfiniteScrollingView : UIView
 
 @property (nonatomic, readwrite) UIActivityIndicatorViewStyle activityIndicatorViewStyle;

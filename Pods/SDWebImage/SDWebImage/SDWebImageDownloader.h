@@ -15,7 +15,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageDownloaderOptions) {
     SDWebImageDownloaderProgressiveDownload = 1 << 1,
 
     /**
-     * By default, request prevent the of NSURLCache. With this flag, NSURLCache
+     * By default, request prevent the use of NSURLCache. With this flag, NSURLCache
      * is used with default policies.
      */
     SDWebImageDownloaderUseNSURLCache = 1 << 2,
@@ -83,17 +83,15 @@ typedef NSDictionary *(^SDWebImageDownloaderHeadersFilterBlock)(NSURL *url, NSDi
  */
 @property (assign, nonatomic) BOOL shouldDecompressImages;
 
-//最大并行多少个下载
 @property (assign, nonatomic) NSInteger maxConcurrentDownloads;
 
 /**
-   当前下载的个数
  * Shows the current amount of downloads that still need to be downloaded
  */
 @property (readonly, nonatomic) NSUInteger currentDownloadCount;
 
 
-/** 设置和获取下载超时时间 默认下载超时 15s
+/**
  *  The timeout value (in seconds) for the download operation. Default: 15.0.
  */
 @property (assign, nonatomic) NSTimeInterval downloadTimeout;
@@ -112,17 +110,16 @@ typedef NSDictionary *(^SDWebImageDownloaderHeadersFilterBlock)(NSURL *url, NSDi
 + (SDWebImageDownloader *)sharedDownloader;
 
 /**
-  *  url 凭据
- Set the default URL credential to be set for request operations.
+ *  Set the default URL credential to be set for request operations.
  */
 @property (strong, nonatomic) NSURLCredential *urlCredential;
 
-/** 设置默认名
+/**
  * Set username
  */
 @property (strong, nonatomic) NSString *username;
 
-/**  设置密码
+/**
  * Set password
  */
 @property (strong, nonatomic) NSString *password;
@@ -190,5 +187,10 @@ typedef NSDictionary *(^SDWebImageDownloaderHeadersFilterBlock)(NSURL *url, NSDi
  * Sets the download queue suspension state
  */
 - (void)setSuspended:(BOOL)suspended;
+
+/**
+ * Cancels all download operations in the queue
+ */
+- (void)cancelAllDownloads;
 
 @end

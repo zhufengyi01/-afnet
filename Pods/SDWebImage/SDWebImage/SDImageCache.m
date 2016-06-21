@@ -33,12 +33,10 @@
 }
 
 @end
-//默认最大缓存一周时间
+
 static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 // PNG signature bytes and data (below)
-
 static unsigned char kPNGSignatureBytes[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
-
 static NSData *kPNGSignatureData = nil;
 
 BOOL ImageDataHasPNGPreffix(NSData *data);
@@ -61,30 +59,17 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 @interface SDImageCache ()
 
 @property (strong, nonatomic) NSCache *memCache;
-
-/**
- *  整个缓存过程中的磁盘缓存路径
- */
 @property (strong, nonatomic) NSString *diskCachePath;
-
-/**
- *  用户路径
- */
 @property (strong, nonatomic) NSMutableArray *customPaths;
-
 @property (SDDispatchQueueSetterSementics, nonatomic) dispatch_queue_t ioQueue;
 
 @end
 
 
 @implementation SDImageCache {
-
-    //文件管理器
     NSFileManager *_fileManager;
-
 }
-#pragma mark  --Public Method
-#pragma mark 单利方法创建
+
 + (SDImageCache *)sharedImageCache {
     static dispatch_once_t once;
     static id instance;
@@ -99,9 +84,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (id)initWithNamespace:(NSString *)ns {
-    
     NSString *path = [self makeDiskCachePath:ns];
-    
     return [self initWithNamespace:ns diskCacheDirectory:path];
 }
 
@@ -143,15 +126,13 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
             _fileManager = [NSFileManager new];
         });
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IOS
         // Subscribe to app events
-        //订阅事件，清除内存
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(clearMemory)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
 
-        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(cleanDisk)
                                                      name:UIApplicationWillTerminateNotification
@@ -171,7 +152,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     SDDispatchQueueRelease(_ioQueue);
 }
-#pragma mark 增加一个只读的内存缓存路径
+
 - (void)addReadOnlyCachePath:(NSString *)path {
     if (!self.customPaths) {
         self.customPaths = [NSMutableArray new];
@@ -181,9 +162,8 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
         [self.customPaths addObject:path];
     }
 }
-#pragma mark 获取文件加密后的路径
+
 - (NSString *)cachePathForKey:(NSString *)key inPath:(NSString *)path {
-    
     NSString *filename = [self cachedFileNameForKey:key];
     return [path stringByAppendingPathComponent:filename];
 }
@@ -192,9 +172,8 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
     return [self cachePathForKey:key inPath:self.diskCachePath];
 }
 
-#pragma mark Privite Method
 #pragma mark SDImageCache (private)
-#pragma mark 使用md5对文件名加密
+
 - (NSString *)cachedFileNameForKey:(NSString *)key {
     const char *str = [key UTF8String];
     if (str == NULL) {
@@ -210,14 +189,12 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 #pragma mark ImageCache
+
 // Init the disk cache
-#pragma mark  获取磁盘路径
 -(NSString *)makeDiskCachePath:(NSString*)fullNamespace{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return [paths[0] stringByAppendingPathComponent:fullNamespace];
 }
-
-
 
 - (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk {
     if (!image || !key) {
@@ -264,23 +241,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 #endif
             }
 
-            if (data) {
-                if (![_fileManager fileExistsAtPath:_diskCachePath]) {
-                    [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-                }
-
-                // get cache Path for image key
-                NSString *cachePathForKey = [self defaultCachePathForKey:key];
-                // transform to NSUrl
-                NSURL *fileURL = [NSURL fileURLWithPath:cachePathForKey];
-
-                [_fileManager createFileAtPath:cachePathForKey contents:data attributes:nil];
-
-                // disable iCloud backup
-                if (self.shouldDisableiCloud) {
-                    [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:nil];
-                }
-            }
+            [self storeImageDataToDisk:data forKey:key];
         });
     }
 }
@@ -291,6 +252,29 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 
 - (void)storeImage:(UIImage *)image forKey:(NSString *)key toDisk:(BOOL)toDisk {
     [self storeImage:image recalculateFromImage:YES imageData:nil forKey:key toDisk:toDisk];
+}
+
+- (void)storeImageDataToDisk:(NSData *)imageData forKey:(NSString *)key {
+    
+    if (!imageData) {
+        return;
+    }
+    
+    if (![_fileManager fileExistsAtPath:_diskCachePath]) {
+        [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+    
+    // get cache Path for image key
+    NSString *cachePathForKey = [self defaultCachePathForKey:key];
+    // transform to NSUrl
+    NSURL *fileURL = [NSURL fileURLWithPath:cachePathForKey];
+    
+    [_fileManager createFileAtPath:cachePathForKey contents:imageData attributes:nil];
+    
+    // disable iCloud backup
+    if (self.shouldDisableiCloud) {
+        [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:nil];
+    }
 }
 
 - (BOOL)diskImageExistsWithKey:(NSString *)key {

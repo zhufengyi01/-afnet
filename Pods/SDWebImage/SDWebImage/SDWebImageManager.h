@@ -12,26 +12,24 @@
 #import "SDImageCache.h"
 
 typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
-    
-    /** url 下载失败，次url是一个黑名单，将不会再重试下载图片
+    /**
      * By default, when a URL fail to be downloaded, the URL is blacklisted so the library won't keep trying.
      * This flag disable this blacklisting.
      */
     SDWebImageRetryFailed = 1 << 0,
 
     /**
-     //只有当UI停止交互的时候去下载图片
      * By default, image downloads are started during UI interactions, this flags disable this feature,
      * leading to delayed download on UIScrollView deceleration for instance.
      */
     SDWebImageLowPriority = 1 << 1,
 
-    /**  只通过内存缓存，禁用磁盘缓存
+    /**
      * This flag disables on-disk caching
      */
     SDWebImageCacheMemoryOnly = 1 << 2,
 
-    /** 禁止进度条下载，只有当图片完全的下载完成才显示
+    /**
      * This flag enables progressive download, the image is displayed progressively during download as a browser would do.
      * By default, the image is only displayed once completely downloaded.
      */
@@ -47,7 +45,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      */
     SDWebImageRefreshCached = 1 << 4,
 
-    /**当应用处于后台将继续下载图片
+    /**
      * In iOS 4+, continue the download of the image if the app goes to background. This is achieved by asking the system for
      * extra time in background to let the request finish. If the background task expires the operation will be cancelled.
      */
@@ -66,9 +64,8 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
     SDWebImageAllowInvalidSSLCertificates = 1 << 7,
 
     /**
-     * By default, image are loaded in the order they were queued. This flag move them to
-     * the front of the queue and is loaded immediately instead of waiting for the current queue to be loaded (which 
-     * could take a while).
+     * By default, images are loaded in the order in which they were queued. This flag moves them to
+     * the front of the queue.
      */
     SDWebImageHighPriority = 1 << 8,
     
@@ -106,17 +103,17 @@ typedef NSString *(^SDWebImageCacheKeyFilterBlock)(NSURL *url);
 
 @optional
 
-/**  控制那张图片应该被下载的时候
+/**
  * Controls which image should be downloaded when the image is not found in the cache.
  *
  * @param imageManager The current `SDWebImageManager`
  * @param imageURL     The url of the image to be downloaded
  *
- * @return Return NO to prevent the downloading of the image on cache misses. If not implemented, YES is implied. 默认yes
+ * @return Return NO to prevent the downloading of the image on cache misses. If not implemented, YES is implied.
  */
 - (BOOL)imageManager:(SDWebImageManager *)imageManager shouldDownloadImageForURL:(NSURL *)imageURL;
 
-/** 允许变换图片立即
+/**
  * Allows to transform the image immediately after it has been downloaded and just before to cache it on disk and memory.
  * NOTE: This method is called from a global queue in order to not to block the main thread.
  *
@@ -183,6 +180,12 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  * @return SDWebImageManager shared instance
  */
 + (SDWebImageManager *)sharedManager;
+
+/**
+ * Allows to specify instance of cache and image downloader used with image manager.
+ * @return new instance of `SDWebImageManager` with specified cache and downloader.
+ */
+- (instancetype)initWithCache:(SDImageCache *)cache downloader:(SDWebImageDownloader *)downloader;
 
 /**
  * Downloads the image at the given URL if not present in cache or return the cached version otherwise.
