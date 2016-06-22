@@ -211,6 +211,9 @@
 
     [vc  addAction:Ac];
     
+ 
+ 
+ 
     [vc addAction:Ac2];
     
     [self presentViewController:vc animated:YES completion:nil];
